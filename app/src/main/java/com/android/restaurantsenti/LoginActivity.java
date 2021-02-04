@@ -6,26 +6,34 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.restaurantsenti.database.DatabaseHandler;
+import com.android.restaurantsenti.model.User;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private TextInputEditText username, password;
+    private TextInputEditText email, password;
     private Button loginButton;
     private TextView signupTextView;
-
+    DatabaseHandler databaseHandler = new DatabaseHandler();
+    private ArrayList<User> usersList = new ArrayList<>();
     public static final String USER_EXISTENCE_SHARED_PREF_NAME = "checkUserExistence";
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private Validation validate = new Validation();
+    User currentUser = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        getDataFromDatabase();
         initializeFields();
 
         signupTextView.setOnClickListener(v -> {
@@ -34,43 +42,46 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener(v -> {
+            getUserData();
             if(validate()){
-                storeDataToSharedPref();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                finish();
+               // finish();
             }
         });
     }
 
-    private void storeDataToSharedPref() {
-        editor.putString("username", username.getText().toString());
-        editor.putString("password", password.getText().toString());
-        editor.apply();
-        editor.commit();
-    }
-
     private boolean validate() {
-        if (TextUtils.isEmpty(username.getText())){
-            username.setError("Username is required.");
+        if (TextUtils.isEmpty(email.getText())){
+            email.setError("Email is required.");
             return false;
         }
         if (TextUtils.isEmpty(password.getText())){
             password.setError("Password is required.");
             return false;
         }
-        return true;
+        if(validate.loginCheckUser(usersList, currentUser)){
+            return true;
+        } else {
+            Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 
     private void initializeFields() {
-        username = (TextInputEditText)findViewById(R.id.username);
+        email = (TextInputEditText)findViewById(R.id.email);
         password = (TextInputEditText)findViewById(R.id.passwordLogin);
         loginButton = (Button)findViewById(R.id.buttonLogin);
         signupTextView = (TextView)findViewById(R.id.signUpText);
-
         sharedPreferences = getSharedPreferences(USER_EXISTENCE_SHARED_PREF_NAME, MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+    }
+
+    private void getDataFromDatabase(){
+        usersList = databaseHandler.getAllData();
+    }
+
+    private void getUserData(){
+        currentUser.setEmail(email.getText().toString());;
+       currentUser.setPassword(password.getText().toString());
     }
 }

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "30254428570",
+    "project_id": "restaurant-senti",
+    "storage_bucket": "restaurant-senti.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:30254428570:android:3ef6489626543399cf4a23",
+        "android_client_info": {
+          "package_name": "com.android.restaurantsenti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "30254428570-dprm8b5uhg88d8rm4j4c0d9nvt44pqh0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.restaurantsenti",
+            "certificate_hash": "7945cfab8aea151c159395bf3917d2a17f834e0a"
+          }
+        },
+        {
+          "client_id": "30254428570-50ilo2pu0ip1r7v7fu9jrjff9kp5c19g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxSr3QhQHcJjf47aB1VX8hcMGoccGitKg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "30254428570-50ilo2pu0ip1r7v7fu9jrjff9kp5c19g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

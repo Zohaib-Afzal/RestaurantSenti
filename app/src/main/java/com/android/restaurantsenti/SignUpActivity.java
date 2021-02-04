@@ -9,8 +9,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.restaurantsenti.database.DatabaseHandler;
 import com.android.restaurantsenti.model.User;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -20,12 +23,15 @@ public class SignUpActivity extends AppCompatActivity {
     private User currentUser = new User();
     private Validation validate = new Validation();
     String confirmPasswordValue;
+    DatabaseHandler databaseHandler = new DatabaseHandler();
+    private ArrayList<User> usersList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
+        getDataFromDatabase();
         initializeFields();
 
         alreadyMember.setOnClickListener(v -> {
@@ -44,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUpUser() {
+        databaseHandler.addToDatabase(currentUser);
         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
@@ -109,27 +116,24 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
 
-//        if (usersList.size() > 0) {
-//            if (!validate.signUpCheckUser(usersList, currentUser)) {
-//                if (currentUser.getPassword().compareTo(confirmPasswordValue) == 0) {
-//                    Toast.makeText(SignUpActivity.this, "Sign Up successful", Toast.LENGTH_SHORT).show();
-//                    return true;
-//                } else {
-//                    Toast.makeText(SignUpActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
-//                }
-//            } else {
-//                Toast.makeText(SignUpActivity.this, "User already registered with this email", Toast.LENGTH_SHORT).show();
-//            }
-//
-//        } else {
-            if (currentUser.getPassword().compareTo(confirmPasswordValue) == 0) {
-                Toast.makeText(SignUpActivity.this, "Sign Up successful", Toast.LENGTH_SHORT).show();
-                return true;
+        if (usersList.size() > 0) {
+            if (!validate.signUpCheckUser(usersList, currentUser)) {
+                if (currentUser.getPassword().compareTo(confirmPasswordValue) == 0) {
+                    Toast.makeText(SignUpActivity.this, "Sign Up successful", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(SignUpActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
-                return false;
+                Toast.makeText(SignUpActivity.this, "User already registered with this email", Toast.LENGTH_SHORT).show();
             }
-       // }
 
+        }
+        return false;
+    }
+
+    private void getDataFromDatabase(){
+
+        usersList = databaseHandler.getAllData();
     }
 }

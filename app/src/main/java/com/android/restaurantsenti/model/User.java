@@ -8,17 +8,23 @@ public class User {
 
     public User(int id, String fullName, String userName, String email, String password) {
         this.id = id;
+        this.email = email;
         this.fullName = fullName;
         this.userName = userName;
-        this.email = email;
         this.password = password;
     }
 
     public User(String fullName, String userName, String email, String password) {
+        this.email = email;
         this.fullName = fullName;
         this.userName = userName;
-        this.email = email;
         this.password = password;
+    }
+    public User(User user){
+        this.email = user.getEmail();
+        this.fullName = user.getFullName();
+        this.userName = user.userName;
+        this.password = user.getPassword();
     }
 
     public User() {
