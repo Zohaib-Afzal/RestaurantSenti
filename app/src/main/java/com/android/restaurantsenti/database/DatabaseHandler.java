@@ -52,6 +52,7 @@ public class DatabaseHandler {
                 });
 
         return userArrayList;
+
     }
 
     public void addToDatabase(User user){
